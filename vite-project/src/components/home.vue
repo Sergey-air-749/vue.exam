@@ -1,11 +1,12 @@
 <template>
     <div class="contenire">
+
+
         <TotalBalanceBlock />
 
-        <Homepanel/>
+        <Homepanel />
 
-
-        
+        <TransactionPopUp />
 
 
     </div>  
@@ -15,6 +16,7 @@
 import { ref, toRef } from 'vue'
 import TotalBalanceBlock from './TotalBalance.vue'
 import Homepanel from './homepanel.vue'
+import TransactionPopUp from './transactionPopUp.vue'
 import { useRouter } from 'vue-router';
 export default {
     setup() {
@@ -31,7 +33,8 @@ export default {
     },
     components: {
         TotalBalanceBlock,
-        Homepanel
+        Homepanel,
+        TransactionPopUp
     } 
 }
 </script>

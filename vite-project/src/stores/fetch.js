@@ -8,11 +8,18 @@ export const useFetchStore = defineStore("fetch", {
     getters: {
         getWalletBalance: (state) => state.userData.walletBalance,
         getEmail: (state) => state.userData.email,
-        getCategories: (state) => state.userData.categories,
     },
     actions: {
         async getUserData() {
 
+            const response = await fetch('http://localhost:3000/api/user/' + localStorage.getItem('userId'))
+            const data = await response.json()
+            console.log(data);
+
+            this.userData = data
+        },
+
+        async getCategories() {
             const response = await fetch('http://localhost:3000/api/user/' + localStorage.getItem('userId'))
             const data = await response.json()
             console.log(data);

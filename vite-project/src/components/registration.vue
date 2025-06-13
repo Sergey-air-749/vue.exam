@@ -50,22 +50,17 @@ export default {
     },
     methods: {
 
-        onSubmit() {
+        async onSubmit() {
             let user = {
                 email: this.userEmail,
                 password: this.userPassword
             };
 
             console.log(user);
-            try {
-                this.exampleStore.registration(user)
-                this.router.replace('/');
-            } catch (error) {
-                console.log(error);
-            }
 
+            await this.exampleStore.registration(user)
+            await this.router.replace('/');
 
-            
         },
 
         showPass() {

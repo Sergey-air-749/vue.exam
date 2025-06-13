@@ -50,7 +50,7 @@ export default {
     },
     methods: {
 
-        onSubmit() {
+        async onSubmit() {
             let user = {
                 email: this.userEmail,
                 password: this.userPassword
@@ -58,12 +58,8 @@ export default {
 
             console.log(user);
 
-            try {
-                this.exampleStore.login(user)
-                this.router.replace('/');
-            } catch (error) {
-                console.log(error);
-            }
+            await this.exampleStore.login(user)
+            await this.router.push('/');
         },
 
         showPass() {

@@ -5,22 +5,28 @@
 
 <script>
 import Footer from './components/footer.vue'
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 export default {
   setup() {
 
     const route = useRoute();
 
-    const isLoginPage = computed(() => {
+    let isLoginPage = computed(() => {
+      
+      isLoginPage = route.fullPath
 
-      if (isLoginPage != '/login' || isLoginPage != '/registration') {
+      if (isLoginPage == '/login' || isLoginPage == '/registration') {
         console.log(route.fullPath);
         return false
+      }else {
+        console.log(isLoginPage);
       }
 
       return true
     });
+
+    console.log(isLoginPage);
 
     return {
       isLoginPage
