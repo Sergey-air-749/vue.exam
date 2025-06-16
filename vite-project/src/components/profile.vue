@@ -30,8 +30,15 @@
                         </div>
 
                         <div class="profileInfoBlock">
+
                            <span>Почта: <span class="userEmail profileInfoSelectLine">{{ userData.email }} </span></span>
                            <span>Баланс: <span class="userWalletBalance profileInfoSelectLine">{{ userData.walletBalance }} </span></span>
+
+                           <h3 class="profileInfoSelectLine">Аналитика</h3>
+
+                           <span>Доход: <span class="userEmail profileInfoSelectLine colorGreen">+{{ userAnalitic.incomeTotal }} </span></span>
+                           <span>Pасход: <span class="userWalletBalance profileInfoSelectLine colorRed">-{{ userAnalitic.expenseTotal }} </span></span>
+
                         </div>
 
                     </div>
@@ -67,6 +74,7 @@ export default {
         const router = useRouter();
 
         const userData = ref(null)
+        const userAnalitic = ref(null)
 
         const error = ref('')
 
@@ -84,6 +92,17 @@ export default {
 
         getUserData()
 
+
+        const getUserAnalitic = async () => {
+            const data = await exampleStore.getUserAnalitic()
+            console.log(data);
+            
+            userAnalitic.value = await data
+            console.log(userAnalitic.value);
+        }
+
+        getUserAnalitic()
+
         const profilelogOutButton = async () => {
             localStorage.removeItem('userId')
             router.replace('/login');
@@ -95,6 +114,7 @@ export default {
         return {
             error,
             userData,
+            userAnalitic,
             getUserData,
             profilelogOutButton,
 

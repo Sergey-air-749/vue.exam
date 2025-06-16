@@ -181,6 +181,7 @@ export default {
 
     .expensesOnMainCategories {
         display: grid;
+        justify-content: center;
         grid-template-columns: 200px 200px;
         grid-template-rows: 100px 100px;
     }

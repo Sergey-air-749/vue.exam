@@ -28,6 +28,7 @@
                             <span v-if="item.type == 'income'">Тип: <span class="itemTransactionSelectLine">Доход</span> </span>
                             <span v-if="item.type == 'expense'">Тип: <span class="itemTransactionSelectLine">Расход</span> </span>
 
+                            <span>Категория: <span class="itemTransactionSelectLine">{{ item.category }}</span> </span>
                             <span>Описание: <span class="itemTransactionSelectLine">{{ item.description }}</span> </span>
                         </div>
 
