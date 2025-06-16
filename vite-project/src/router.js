@@ -5,6 +5,7 @@ import registration from './components/registration.vue'
 import home from './components/home.vue'
 import categories from './components/categories.vue'
 import transactions from './components/transactions.vue'
+import profile from './components/profile.vue'
 
 const routes = [
     {
@@ -31,6 +32,11 @@ const routes = [
         path: '/transactions',
         name: 'transactions',
         component: transactions
+    },
+    {
+        path: '/profile',
+        name: 'profile',
+        component: profile
     },
     
 ]

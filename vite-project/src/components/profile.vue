@@ -1,9 +1,5 @@
 <template>
     <div class="contenire">
-
-
-        <TotalBalanceBlock @open-popup="openTransactionPopUp"/>
-
         <div class="panelBackground">
 
             <div class="panel">
@@ -12,34 +8,33 @@
             <div class="expensesOnMainTransactionsBlock">
 
                 <div class="headPanel">
-                    <h3>Все транзакции</h3>
+                    <h3>Профиль</h3>
+
+                    <button type="button" @click="profilelogOutButton()" class="profilelogOutButton" id="profilelogOutButton">Выход</button>
                 </div>
                 
 
-                <div class="allTransactions">
+                <div class="profileBlock">
 
+                    <div class="profile" v-if="userData == null">
 
-                    <div class="itemTransaction" v-for="(item, index) in exampleStore.transactionsArr" :key="index">
-
-                        <div class="itemTransactionInfo">
-                            <span>Сума: <span class="itemTransactionSelectLine">{{ item.amount }}</span> </span>
-                            <span>Дата: <span class="itemTransactionSelectLine">{{ item.date }}</span> </span>
-
-                            <span v-if="item.type == 'income'">Тип: <span class="itemTransactionSelectLine">Доход</span> </span>
-                            <span v-if="item.type == 'expense'">Тип: <span class="itemTransactionSelectLine">Расход</span> </span>
-
-                            <span>Описание: <span class="itemTransactionSelectLine">{{ item.description }}</span> </span>
-                        </div>
-
-                        <div class="itemTransactionСommand">
-                            <button class="itemTransactionDeleteButton" @click="itemTransactionDeleteButton(item._id)">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ffffff"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
-                            </button>
-                        </div>
-
+                        <h2>Загрузка...</h2>
 
                     </div>
 
+
+                    <div class="profile" v-if="userData != null">
+
+                        <div class="profileInfoIconBlock">
+                            <img :src="userData.avatar" alt="userIcon" class="userIcon">
+                        </div>
+
+                        <div class="profileInfoBlock">
+                           <span>Почта: <span class="userEmail profileInfoSelectLine">{{ userData.email }} </span></span>
+                           <span>Баланс: <span class="userWalletBalance profileInfoSelectLine">{{ userData.walletBalance }} </span></span>
+                        </div>
+
+                    </div>
 
                 </div>
 
@@ -71,148 +66,45 @@ export default {
         const exampleStore = useFetchStore()
         const router = useRouter();
 
-        const name = ref('')
-        const type = ref('')
-        const typeName = ref('')
+        const userData = ref(null)
 
-        const showTransactionPopUp = ref(false);
-        const transactionType = ref('');
-        const getAllUserTransaction = ref([]);
-
-        const showNewCategoriesPopUp = ref(false)
-        const showNewCategoriesTabType = ref(false)
-        
         const error = ref('')
 
         if (localStorage.getItem('userId') == null) {
             router.replace('/login');
         }
 
-        const showCategoryType = () => {
-            if (showNewCategoriesTabType.value == true) {
-                showNewCategoriesTabType.value = false
-            } else {
-                showNewCategoriesTabType.value = true
-            }
-
-            console.log(showNewCategoriesTabType.value);
-        }
-
-        const selectNewCategoryType = (typeCategory) => {
-            type.value = typeCategory
-
-            if (type.value == 'income') {
-                typeName.value = 'Даход'
-                showCategoryType()
-
-            } else if (type.value == 'expense') {
-                typeName.value = 'Расход'
-                showCategoryType()
-
-            } else {
-                console.log('Неверный тип категории');
-            }
-
-            console.log(type.value);
-        }
-
-        const getAllTransaction = async () => {
-            const data = await exampleStore.getTransaction()
-            getAllUserTransaction.value = data
-            console.log(exampleStore.transactionsArr);
+        const getUserData = async () => {
+            const data = await exampleStore.getUserData()
+            console.log(data);
             
+            userData.value = await data
+            console.log(userData.value);
         }
 
-        getAllTransaction()
+        getUserData()
+
+        const profilelogOutButton = async () => {
+            localStorage.removeItem('userId')
+            router.replace('/login');
+        }
 
 
 
-
-
-        const openTransactionPopUp = (type) => {
-            transactionType.value = type;
-            showTransactionPopUp.value = true;
-        };
-
-        const closeTransactionPopUp = () => {
-            showTransactionPopUp.value = false;
-            transactionType.value = ''; 
-        };
-
-        const openNewCategoryPopUp = () => {
-            showNewCategoriesPopUp.value = true;
-        };
-
-        const closeNewCategoryPopUp = () => {
-            showNewCategoriesPopUp.value = false;
-            transactionType.value = ''; 
-        };
 
         return {
-            name,
-            type,
-            typeName,
             error,
-            getAllUserTransaction,
-            showTransactionPopUp,
-            transactionType,
-            openTransactionPopUp,
-            closeTransactionPopUp,
+            userData,
+            getUserData,
+            profilelogOutButton,
 
-            showNewCategoriesPopUp,
-            showNewCategoriesTabType,
-            openNewCategoryPopUp,
-            closeNewCategoryPopUp,
-
-            showCategoryType,
-            selectNewCategoryType,
-
-            exampleStore,
-            getAllTransaction
+            exampleStore
         }
 
     },
     components: {
         TotalBalanceBlock,
         TransactionPopUp
-    },
-    methods: {
-
-        async onSubmit() {
-            const arr = { 
-                name: this.name,
-                type: this.type, 
-            }
-
-            console.log(arr);
-
-            const response = await this.exampleStore.newCategori(arr)
-            console.log(response.message); 
-            
-            if (response.message == 'Successful') {
-                this.closeNewCategoryPopUp()
-                this.allUserCategories = response.categories            
-            } else {
-                this.error = response
-                console.log(response);
-            }
-        },
-
-        // удаление транзакции
-
-        async itemTransactionDeleteButton(Id) {           
-
-            const response = await this.exampleStore.deleteTransaction(Id)
-            console.log(response.message); 
-            
-            if (response.message == 'Successful') {
-                this.getAllTransaction()      
-            } else {
-                this.error = response
-                console.log(response);
-            }
-        }
-
     }
 }
 </script>
@@ -263,6 +155,7 @@ export default {
     .panelBackground {
         height: 67vh;
         background-color: rgb(201, 234, 255);
+        padding-top: 26px;
     }
 
     .panel {
@@ -272,6 +165,47 @@ export default {
         background-color: rgb(255, 255, 255);
         border-radius: 20px 20px 0px 0px;
     }
+
+
+    .profile {
+        display: flex;
+        padding: 10px;
+        padding-top: 20px;
+        gap: 30px;
+    }
+
+    .profileInfoBlock {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        color: #676767;
+    }
+
+    .profileInfoSelectLine {
+        color: #000;
+    }
+
+    .userIcon {
+        width: 70px;
+        height: 70px;
+        border-radius: 100px;
+    }
+
+
+    .profilelogOutButton {
+        width: 100px;
+        padding: 7px 10px;
+        background-color: #e70000;
+        border: none;
+        border-radius: 100px;
+        font-weight: 600;
+        color: #ffffff;
+    }
+
+
+
+
+
 
     .mainСategoriesInfo {
         display: flex;
@@ -339,7 +273,7 @@ export default {
     }
 
     .itemTransaction .itemTransactionSelectLine {
-        /* font-weight: 600; */
+        font-weight: 600;
         color: #000000;
     }
 

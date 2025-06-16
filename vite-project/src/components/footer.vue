@@ -1,9 +1,10 @@
 <template>
 
   <div class="footerPanrl">
-    <router-link class="footerLink" to="/">Главное</router-link>
-    <router-link class="footerLink" to="/">Категории</router-link>
-    <router-link class="footerLink" to="/">Транзакция</router-link>
+    <router-link class="footerLink" id="home" to="/">Главное</router-link>
+    <router-link class="footerLink" id="categories" to="/categories">Категории</router-link>
+    <router-link class="footerLink" id="transactions" to="/transactions">Транзакция</router-link>
+    <router-link class="footerLink" id="transactions" to="/profile">Профиль</router-link>
   </div>
 
 </template>
@@ -12,14 +13,20 @@
 import { useTemplateRef, onMounted, toRef, watch } from 'vue'
 import { useRoute } from 'vue-router';
 export default {
-    setup() {
+    setup(props) {
 
         const currentRoute = useRoute();
 
         console.log(currentRoute.path);
         console.log(currentRoute.fullPath);
 
+
         onMounted(() => {
+
+            const home = document.querySelector('#home')
+            const categories = document.querySelector('#categories')
+            const transactions = document.querySelector('#transactions')
+
             const footerLinks = document.querySelectorAll('.footerLink')
             console.log(footerLinks);
 
@@ -35,13 +42,19 @@ export default {
                 });
 
             });
-            
+
         })
 
         return {
             useRoute
         }
     
+    },
+    props: {
+        url: {
+            type: String,
+            required: true
+        }
     }
 }
 </script>
@@ -52,6 +65,7 @@ export default {
     width: 100%;
     display: flex;
     justify-content: space-around;
+    backdrop-filter: blur(80px);
     position: fixed;
     padding: 15px;
     bottom: 0px;

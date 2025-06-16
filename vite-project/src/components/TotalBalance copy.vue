@@ -9,7 +9,6 @@
 
 <script>
 import { ref, toRef } from 'vue'
-import { useCounterStore } from '@/stores/counter'
 export default {
     setup() {
         
@@ -22,17 +21,17 @@ export default {
 
         console.log(userId.value);
 
-        async function getUsreData() {
-            const response = await fetch('http://localhost:3000/api/user/' + userId.value)
-            const data = await response.json()
-            console.log(data);
-            userData.value = data
+        const getUsreData = async () => {
+
+          const data = await exampleStore.getUsreData()
+          userData.value = data
+
         }
 
         getUsreData()
 
         return {
-            userData
+          userData
         }
 
     }

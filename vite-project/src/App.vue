@@ -1,19 +1,21 @@
 <template>
   <router-view></router-view>
-  <Footer v-if="isLoginPage == true"/>
+  <Footer v-if="isLoginPage == true" :url="urlfullPath"/>
 </template>
 
 <script>
 import Footer from './components/footer.vue'
-import { computed, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 export default {
   setup() {
 
     const route = useRoute();
+    let urlfullPath = ref('')
 
     let isLoginPage = computed(() => {
-      
+
+      urlfullPath = route.fullPath
       isLoginPage = route.fullPath
 
       if (isLoginPage == '/login' || isLoginPage == '/registration') {
@@ -29,6 +31,7 @@ export default {
     console.log(isLoginPage);
 
     return {
+      urlfullPath,
       isLoginPage
     };
   },
