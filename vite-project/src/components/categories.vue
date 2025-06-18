@@ -56,8 +56,9 @@
 
         </div>
 
-
-        <TransactionPopUp v-if="showTransactionPopUp" :transaction-type="transactionType" @close-popup="closeTransactionPopUp" />
+        <Transition name="bounce">  
+            <TransactionPopUp v-if="showTransactionPopUp" :transaction-type="transactionType" @close-popup="closeTransactionPopUp" />
+        </Transition>
 
 
 
@@ -270,6 +271,7 @@ export default {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        padding: 10px 10px 0px 20px;
     }
 
 
@@ -305,12 +307,19 @@ export default {
         background-color: rgb(201, 234, 255);
     }
 
+    .headPanel {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 3px 10px 0px 10px;
+    }
+
     .panel {
         display: flex;
         flex-direction: column;
         height: 67vh;
         background-color: rgb(255, 255, 255);
-        border-radius: 20px 20px 0px 0px;
+        border-radius: 40px 40px 0px 0px;
     }
 
     .mainСategoriesInfo {
@@ -396,7 +405,7 @@ export default {
         top: 0;
         height: 100vh;
         width: 100%;
-        backdrop-filter: blur(80px);
+        backdrop-filter: blur(20px);
     }
 
     .newCategoriesForm {
@@ -436,11 +445,11 @@ export default {
         border-radius: 10px;
     }
 
-    .allCategory {
+    /* .allCategory {
         background-color: #ffffff;
         border: 1.5px solid rgb(172, 172, 172);
         border-radius: 10px;
-    }
+    } */
 
     .newCategoriesTypeItem {
         text-align: start;

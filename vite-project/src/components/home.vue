@@ -11,8 +11,9 @@
 
             <div class="expensesOnMainCategoriesBlock">
 
-                
-                <h3>Траты на основные категории</h3>
+                <div class="headPanel">
+                    <h3>Траты на основные категории</h3>
+                </div>
 
                 <div class="expensesOnMainCategories">
 
@@ -73,8 +74,9 @@
 
         </div>
 
-
-        <TransactionPopUp v-if="showTransactionPopUp" :transaction-type="transactionType" @close-popup="closeTransactionPopUp" />
+        <Transition name="bounce">
+            <TransactionPopUp v-if="showTransactionPopUp" :transaction-type="transactionType" @close-popup="closeTransactionPopUp" />
+        </Transition>    
 
 
     </div>  
@@ -146,7 +148,12 @@ export default {
         height: 100vh;
     }
 
-
+    .headPanel {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 3px 10px 0px 10px;
+    }
 
     .panelBackground {
         height: 67vh;
@@ -158,7 +165,7 @@ export default {
         flex-direction: column;
         height: 67vh;
         background-color: rgb(255, 255, 255);
-        border-radius: 20px 20px 0px 0px;
+        border-radius: 40px 40px 0px 0px;
     }
 
     .mainСategoriesInfo {

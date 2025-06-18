@@ -1,4 +1,4 @@
-<template>
+    <template>
   
     <div class="newTransactionBackground">
 
@@ -17,15 +17,24 @@
                     <input type="date" v-model="date" placeholder="ДД.ММ.ГГГГ" name="date" id="date" required>
                     <input type="text" v-model="category" @click="showCategory" placeholder="Категория" name="category" id="category" readonly required>
 
-                    <div class="allCategory" v-if="showCategoryStatus != false">
+                    <Transition name="allCategoryShow">
+                        <div class="allCategory" v-if="showCategoryStatus != false">
 
-                        <button type="button" @click="itemCategoryButtonSelect(item.name)" class="itemCategory" v-for="(item, index) in categories" :key="index">
-                            {{ item.name }}
-                        </button>
+                            <button type="button" @click="showCategory" class="itemCategory closePopUp">
 
-                    </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+                                <span>Закрыть</span>
 
-                    <input type="text" v-model="description" placeholder="Описание" name="description" id="description" required>
+                            </button>
+
+                            <button type="button" @click="itemCategoryButtonSelect(item.name)" class="itemCategory" v-for="(item, index) in categories" :key="index">
+                                {{ item.name }}
+                            </button>
+
+                        </div>
+                    </Transition>
+
+                    <input type="text" v-model="description" placeholder="Короткое название" name="description" id="description" required>
 
                     <p class="error">{{ error }}</p>
                 </div>
@@ -174,7 +183,7 @@ export default {
         top: 0;
         height: 100vh;
         width: 100%;
-        backdrop-filter: blur(80px);
+        backdrop-filter: blur(20px);
     }
 
     .newTransactionForm {
@@ -185,6 +194,7 @@ export default {
         width: 380px;
         background-color: #ffffff;
         border: 1.5px solid rgb(172, 172, 172);
+        box-shadow: rgb(0 0 0 / 30%) 0px 5px 20px 0px;
         border-radius: 10px;
     }
 
@@ -211,13 +221,20 @@ export default {
         padding: 10px 15px;
         background-color: #ffffff;
         border: 1.5px solid rgb(172, 172, 172);
-        border-radius: 10px;
+        border-radius: 100px;
     }
 
     .allCategory {
+        position: absolute;
+            overflow: scroll;
+        top: 20px;
+        left: 22px;
+        width: 90%;
+        height: 90%;
         background-color: #ffffff;
         border: 1.5px solid rgb(172, 172, 172);
-        border-radius: 10px;
+        box-shadow: rgb(0 0 0 / 30%) 0px 5px 20px 0px;
+        border-radius: 20px;
     }
 
     .itemCategory {
@@ -230,6 +247,14 @@ export default {
         font-size: 14px;
     }
 
+    .closePopUp {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+
+
     .buttonsNewTran {
         display: flex;
         flex-direction: column;
@@ -241,7 +266,7 @@ export default {
         padding: 10px 15px;
         background-color: #0073ff;
         border: 1.5px solid #0073ff;
-        border-radius: 10px;
+        border-radius: 100px;
         font-weight: 600;
         color: #ffffff;
         width: 100%;

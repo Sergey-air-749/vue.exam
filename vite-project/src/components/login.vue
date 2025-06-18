@@ -97,6 +97,7 @@ export default {
         height: 400px;
         padding: 20px;
         border: 1.5px solid rgb(203, 203, 203);
+        box-shadow: rgb(0 0 0 / 30%) 0px 5px 20px 0px;
         border-radius: 10px;
         gap: 30px;
     }

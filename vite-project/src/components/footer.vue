@@ -65,7 +65,7 @@ export default {
     width: 100%;
     display: flex;
     justify-content: space-around;
-    backdrop-filter: blur(80px);
+    backdrop-filter: blur(20px);
     position: fixed;
     padding: 15px;
     bottom: 0px;

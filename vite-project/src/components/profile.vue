@@ -18,7 +18,7 @@
 
                     <div class="profile" v-if="userData == null">
 
-                        <h2>Загрузка...</h2>
+                        <h3>Загрузка...</h3>
 
                     </div>
 
@@ -34,10 +34,10 @@
                            <span>Почта: <span class="userEmail profileInfoSelectLine">{{ userData.email }} </span></span>
                            <span>Баланс: <span class="userWalletBalance profileInfoSelectLine">{{ userData.walletBalance }} </span></span>
 
-                           <h3 class="profileInfoSelectLine">Аналитика</h3>
+                           <!-- <h3 class="profileInfoSelectLine">Аналитика</h3>
 
                            <span>Доход: <span class="userEmail profileInfoSelectLine colorGreen">+{{ userAnalitic.incomeTotal }} </span></span>
-                           <span>Pасход: <span class="userWalletBalance profileInfoSelectLine colorRed">-{{ userAnalitic.expenseTotal }} </span></span>
+                           <span>Pасход: <span class="userWalletBalance profileInfoSelectLine colorRed">-{{ userAnalitic.expenseTotal }} </span></span> -->
 
                         </div>
 
@@ -45,15 +45,45 @@
 
                 </div>
 
-            </div>
+                <div class="headPanel">
+                    <h3>Аналитика</h3>
+                </div>
 
+
+                <div class="profileBlock">
+
+                    <div class="profile" v-if="userAnalitic == null">
+
+                        <h3>Загрузка...</h3>
+
+                    </div>
+
+
+                    <div class="profile" v-if="userAnalitic != null">
+
+                        <div class="analiticInfoBlock">
+                           <span>Доход: <span class="userEmail profileInfoSelectLine colorGreen">+{{ userAnalitic.incomeTotal }} </span></span>
+                           <span>Pасход: <span class="userWalletBalance profileInfoSelectLine colorRed">-{{ userAnalitic.expenseTotal }} </span></span>
+                        </div>
+
+                        <div class="TotalBalanceChart">
+                            <BarChart />
+                        </div>
+
+                    </div>
+
+                </div>
+                
+
+            </div>
 
             </div>
 
         </div>
 
-
-        <TransactionPopUp v-if="showTransactionPopUp" :transaction-type="transactionType" @close-popup="closeTransactionPopUp" />
+        <Transition name="bounce">  
+            <TransactionPopUp v-if="showTransactionPopUp" :transaction-type="transactionType" @close-popup="closeTransactionPopUp" />
+        </Transition>
 
 
     </div>  
@@ -62,11 +92,14 @@
 </template>
 
 <script>
-import { ref, toRef } from 'vue'
+import { onMounted, ref, toRef } from 'vue'
 import TotalBalanceBlock from './TotalBalance.vue'
 import TransactionPopUp from './transactionPopUp.vue'
 import { useFetchStore } from '../stores/fetch';
 import { useRouter } from 'vue-router';
+
+import BarChart from './BarChart.vue'
+
 export default {
     setup(props, { emit }) {
 
@@ -81,6 +114,9 @@ export default {
         if (localStorage.getItem('userId') == null) {
             router.replace('/login');
         }
+
+
+
 
         const getUserData = async () => {
             const data = await exampleStore.getUserData()
@@ -103,6 +139,8 @@ export default {
 
         getUserAnalitic()
 
+
+
         const profilelogOutButton = async () => {
             localStorage.removeItem('userId')
             router.replace('/login');
@@ -118,13 +156,14 @@ export default {
             getUserData,
             profilelogOutButton,
 
-            exampleStore
+            exampleStore, 
         }
 
     },
     components: {
         TotalBalanceBlock,
-        TransactionPopUp
+        TransactionPopUp,
+        BarChart
     }
 }
 </script>
@@ -142,8 +181,8 @@ export default {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        padding: 3px 10px 0px 10px;
     }
-
 
     .allCategorieButton {
         display: flex;
@@ -183,7 +222,7 @@ export default {
         flex-direction: column;
         height: 67vh;
         background-color: rgb(255, 255, 255);
-        border-radius: 20px 20px 0px 0px;
+        border-radius: 40px 40px 0px 0px;
     }
 
 
@@ -198,6 +237,13 @@ export default {
         display: flex;
         flex-direction: column;
         gap: 10px;
+        color: #676767;
+    }
+
+    .analiticInfoBlock {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
         color: #676767;
     }
 
@@ -267,126 +313,5 @@ export default {
     }
 
 
-
-
-
-
-    .allTransactions {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .itemTransaction {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        padding: 25px 10px;
-        border-bottom: 1px solid #dedede;
-    }
-
-    .itemTransaction .itemTransactionInfo {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        color: #676767;
-    }
-
-    .itemTransaction .itemTransactionSelectLine {
-        font-weight: 600;
-        color: #000000;
-    }
-
-
-
-
-
-
-
-    .newCategoriesBackground {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        position: absolute;
-        top: 0;
-        height: 100vh;
-        width: 100%;
-        backdrop-filter: blur(80px);
-    }
-
-    .newCategoriesForm {
-        display: flex;
-        flex-direction: column;
-        gap: 30px;
-        padding: 15px;
-        width: 380px;
-        background-color: #ffffff;
-        border: 1.5px solid rgb(172, 172, 172);
-        border-radius: 10px;
-    }
-
-
-    .titleBox {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 10px 10px 0px 10px;
-    }
-
-    .inputsNewCategori {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .closePopupButton {
-        background: none;
-        border: none;
-    }
-
-    .inputsNewCategori input {
-        padding: 10px 15px;
-        background-color: #ffffff;
-        border: 1.5px solid rgb(172, 172, 172);
-        border-radius: 10px;
-    }
-
-    .allCategory {
-        background-color: #ffffff;
-        border: 1.5px solid rgb(172, 172, 172);
-        border-radius: 10px;
-    }
-
-    .newCategoriesTypeItem {
-        text-align: start;
-        width: 100%;
-        padding: 10px;
-        background: none;
-        border: none;
-        border-bottom: 1.5px solid rgb(172, 172, 172);
-        font-size: 14px;
-    }
-
-    .buttonsNewCategori {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .buttonsNewCategori button {
-        padding: 10px 15px;
-        background-color: #0073ff;
-        border: 1.5px solid #0073ff;
-        border-radius: 10px;
-        font-weight: 600;
-        color: #ffffff;
-        width: 100%;
-    }
-
-    .error {
-        color: rgb(185, 0, 0);
-    }
 
 </style>

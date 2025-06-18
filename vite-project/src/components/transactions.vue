@@ -13,23 +13,37 @@
 
                 <div class="headPanel">
                     <h3>Все транзакции</h3>
+
+                    <button>{{ filterType }}</button>
                 </div>
                 
 
                 <div class="allTransactions">
 
+                    <div class="NotTransactions" v-if="JSON.stringify(exampleStore.transactionsArr) == JSON.stringify([])">
+                        <span>Нет транзакций</span>
+                    </div>
 
                     <div class="itemTransaction" v-for="(item, index) in exampleStore.transactionsArr" :key="index">
 
                         <div class="itemTransactionInfo">
-                            <span>Сума: <span class="itemTransactionSelectLine">{{ item.amount }}</span> </span>
-                            <span>Дата: <span class="itemTransactionSelectLine">{{ item.date }}</span> </span>
 
-                            <span v-if="item.type == 'income'">Тип: <span class="itemTransactionSelectLine">Доход</span> </span>
-                            <span v-if="item.type == 'expense'">Тип: <span class="itemTransactionSelectLine">Расход</span> </span>
+                            <div class="itemTransactionInfoBlock TranNameData">
+                                <span class="itemTransactionSelectLine">{{ item.description }}</span>
+                                <span class="itemTransactionSelectLine">{{ item.date }}</span>
+                            </div>
+                           
+                            <div class="itemTransactionInfoBlock TranType">
+                                <span v-if="item.type == 'income'" class="itemTransactionSelectLine">Доход</span>
+                                <span v-if="item.type == 'expense'" class="itemTransactionSelectLine">Расход</span>
+                            </div>
+                            
 
-                            <span>Категория: <span class="itemTransactionSelectLine">{{ item.category }}</span> </span>
-                            <span>Описание: <span class="itemTransactionSelectLine">{{ item.description }}</span> </span>
+                            <div class="itemTransactionInfoBlock TranCategoryAmount">
+                                <span class="itemTransactionSelectLine">{{ item.category }}</span>
+                                <span class="itemTransactionSelectLine">{{ item.amount }}</span> 
+                            </div>
+                            
                         </div>
 
                         <div class="itemTransactionСommand">
@@ -52,7 +66,16 @@
         </div>
 
 
-        <TransactionPopUp v-if="showTransactionPopUp" :transaction-type="transactionType" @close-popup="closeTransactionPopUp" />
+<!--         
+        <div class="TransactionsFilterBackground">
+            TransactionsFilter
+        </div> -->
+
+
+
+        <Transition name="bounce">  
+            <TransactionPopUp v-if="showTransactionPopUp" :transaction-type="transactionType" @close-popup="closeTransactionPopUp" />
+        </Transition>
 
 
     </div>  
@@ -119,6 +142,8 @@ export default {
 
         const getAllTransaction = async () => {
             const data = await exampleStore.getTransaction()
+            console.log(data);
+
             getAllUserTransaction.value = data
             console.log(exampleStore.transactionsArr);
             
@@ -231,6 +256,7 @@ export default {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        padding: 3px 10px 0px 10px;
     }
 
 
@@ -258,6 +284,12 @@ export default {
     }
 
 
+    .NotTransactions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 100px 0px;
+    }
 
 
 
@@ -271,7 +303,7 @@ export default {
         flex-direction: column;
         height: 67vh;
         background-color: rgb(255, 255, 255);
-        border-radius: 20px 20px 0px 0px;
+        border-radius: 40px 40px 0px 0px;
     }
 
     .mainСategoriesInfo {
@@ -334,10 +366,39 @@ export default {
 
     .itemTransaction .itemTransactionInfo {
         display: flex;
-        flex-direction: column;
-        gap: 10px;
+        align-items: center;
+        gap: 15px;
         color: #676767;
     }
+
+    .itemTransactionInfo .itemTransactionInfoBlock {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        border-right: 1px solid #dedede;
+        padding-right: 20px;
+        gap: 10px;
+    }
+
+    .TranNameData {
+        width: 150px;
+        word-break: break-all;
+    }
+
+    .TranType {
+        height: 50px;
+    }
+
+    .TranCategoryAmount {
+
+    }
+
+
+
+
+
+
+
 
     .itemTransaction .itemTransactionSelectLine {
         /* font-weight: 600; */
@@ -359,7 +420,7 @@ export default {
         top: 0;
         height: 100vh;
         width: 100%;
-        backdrop-filter: blur(80px);
+        backdrop-filter: blur(20px);
     }
 
     .newCategoriesForm {
@@ -399,11 +460,11 @@ export default {
         border-radius: 10px;
     }
 
-    .allCategory {
+    /* .allCategory {
         background-color: #ffffff;
         border: 1.5px solid rgb(172, 172, 172);
         border-radius: 10px;
-    }
+    } */
 
     .newCategoriesTypeItem {
         text-align: start;

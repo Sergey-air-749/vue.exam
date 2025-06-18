@@ -48,9 +48,13 @@ export const useFetchStore = defineStore("fetch", {
 
                 if (response.ok) {       
                     const data = await response.json()
-                    console.log(data);
-                    this.transactionsArr = data.transactions
-                    console.log(this.$state.transactionsArr);
+                    if (data == 'Недостаточно средств') {
+                        console.log(data);
+                    } else {
+                        this.transactionsArr = data.transactions
+                        console.log(this.$state.transactionsArr);   
+                    }
+
                     return data
                 } else {
                     throw new Error('Network response was not ok');
@@ -102,6 +106,9 @@ export const useFetchStore = defineStore("fetch", {
                 if (response.ok) {       
                     const data = await response.json()
                     console.log(data);
+
+                    // const filterTran = await data.sort((a, b) => a.amount - b.amount);
+                    // console.log(filterTran);
 
                     this.transactionsArr = data
                     console.log(this.$state.transactionsArr);
